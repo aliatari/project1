@@ -8,6 +8,7 @@
 * People searching for an actor
 * People searching through movie genre's
 
+# Story: 
 As a movie-buff, I want a cool movie database, so that I can
 find information about a movie quickly.
 
