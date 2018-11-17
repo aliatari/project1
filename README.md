@@ -1,4 +1,3 @@
-# project1
 ## Minimum Viable Product
 
 ## General Idea: Movie Dababase Search Engine
