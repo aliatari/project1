@@ -1,9 +1,9 @@
 # project1
-# Minimum Viable Product
+## Minimum Viable Product
 
-# General Idea: Movie Dababase Search Engine
+## General Idea: Movie Dababase Search Engine
 
-# Target Audience:
+## Target Audience:
 * People who are searching for a movie, 
 * People searching for an actor
 * People searching through movie genre's
@@ -17,7 +17,7 @@ find information about a movie quickly.
 * 3: As a movie-buff I want to search movies by movie title
 * 4: As a movie-buff I want to get results from my searches
 
-# Card:
+## Card:
 * 1: Movie poster in returned results
 * 2: Title
 * 3: Year
