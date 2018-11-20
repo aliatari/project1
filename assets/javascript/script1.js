@@ -30,16 +30,20 @@ $(function() {
         $('.inner-div-out').removeClass('active');
         $('.inner-div-in').remove();
         $('.inner-div-out').remove();
-
-        let innerDivIn = $('<div class="inner-div-in"></div>');
-        innerDivIn.css("background-image", `url('assets/images/${bgImageArray[bgIndex]}')`);
-        innerDivIn.addClass('active');
-        $('.outer-div').append(innerDivIn);
-        bgIndex++;
-        let innerDivOut = $('<div class="inner-div-out"></div>');
-        innerDivOut.css("background-image", `url('assets/images/${bgImageArray[bgIndex]}')`);
-        $('.outer-div').append(innerDivOut);
-        flip = false;
+        if (bgIndex !== bgImageArray.length) {
+            let innerDivIn = $('<div class="inner-div-in"></div>');
+            innerDivIn.css("background-image", `url('assets/images/${bgImageArray[bgIndex]}')`);
+            innerDivIn.addClass('active');
+            $('.outer-div').append(innerDivIn);
+            bgIndex++;
+            let innerDivOut = $('<div class="inner-div-out"></div>');
+            innerDivOut.css("background-image", `url('assets/images/${bgImageArray[bgIndex]}')`);
+            $('.outer-div').append(innerDivOut);
+            flip = false;
+        }else if(bgIndex === bgImageArray.length){
+            bgIndex = 2;
+            zoomIn();
+        }
     }
 
 
@@ -51,7 +55,7 @@ $(function() {
            }, 2000);
            bgIndex++;
         }
-        else if (bgIndex >= 1){
+        else if ((bgIndex >= 1) && (bgIndex !== bgImageArray.length)) {
             $('.inner-div-in').removeClass('active');
             $('.inner-div-in').remove();
             $('.inner-div-out').remove();
@@ -66,10 +70,19 @@ $(function() {
             innerDivIn.css("background-image", `url('assets/images/${bgImageArray[bgIndex]}')`);
             $('.outer-div').append(innerDivIn);
             flip = true;
+        }else if (bgIndex === bgImageArray.length){
+            bgIndex = 2;
+            zoomOut();
         }
     }
 })
 
+/* -------------------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------------------- */
 
 // captures value(s) from form submission
 $('#my-form').submit(function (event){
@@ -80,10 +93,12 @@ $('#my-form').submit(function (event){
     makeApiCall(movieInput);
 });
 
+
 // makes api call with param(s)
 makeApiCall = function(movieInput) {
     // only param being passed currently is movieInput (a movie title)
-    let queryURL = "https://www.omdbapi.com/?t=" + movieInput +"&apikey=376982ce&"
+    let queryURL = "https://api.themoviedb.org/3/search/movie?api_key=c5203bcbbee2d69dcb21052d7ef5621c&query=" + movieInput;
+
     $.ajax({ /* jquery ajax call */
             url: queryURL,
             method: "GET"
@@ -92,3 +107,43 @@ makeApiCall = function(movieInput) {
             console.log(response);
         });
 }
+
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "https://api.themoviedb.org/3/genre/movie/list?language=en-US&api_key=c5203bcbbee2d69dcb21052d7ef5621c",
+  "method": "GET",
+  "headers": {},
+  "data": "{}"
+}
+
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
+
+
+// makes api call with param(s)
+makeApiCallGenre = function() {
+    // only param being passed currently is movieInput (a movie title)
+    // let queryURL = "https://api.themoviedb.org/3/genre/13/movie/list?language=en-US&api_key=c5203bcbbee2d69dcb21052d7ef5621c";
+    let queryURL = "https://api.themoviedb.org/3/discover/movie?api_key=c5203bcbbee2d69dcb21052d7ef5621c&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte=1990-01-01&primary_release_date.lte=1999-12-31&vote_average.gte=6&with_genres=" + genre;
+
+
+    $.ajax({ /* jquery ajax call */
+            url: queryURL,
+            method: "GET"
+        })
+        .then(function (response) { /* promise */
+            console.log(response);
+        });
+}
+
+makeApiCallGenre();
+
+
+
+
+
+
+
+// url: "genre/" + options.id + "/movies" + theMovieDb.common.generateQuery(options)
