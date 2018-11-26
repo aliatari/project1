@@ -1,5 +1,7 @@
-// Shorthand for $( document ).ready()
+
 var bgImageArray = ["http://image.tmdb.org/t/p/original//uyJgTzAsp3Za2TaPiZt2yaKYRIR.jpg"];
+
+// Shorthand for $( document ).ready()
 $(function() {
 
     NowPlaying();
