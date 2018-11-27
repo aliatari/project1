@@ -3,6 +3,10 @@ body{
   height: 100%;
 }
 
+.navbar {
+  border-radius: 0;
+}
+
 .container {
   width: 100%;
   height: 100%;
@@ -18,6 +22,10 @@ body{
   margin-left: 5%;
 }
 
+.pagination {
+  margin-left: 42%;
+  margin-bottom: 5%;
+}
 
 .card {
   max-height: 300px;
@@ -123,20 +131,20 @@ body{
 
 #overview {
   width: 100%;
-  height: auto;
+  height: 127px;
   margin-top: 45%;
   clear: both;
-  overflow: hidden;
+  /* overflow: hidden; */
   font-size: 12px;
   line-height: 14px;
 }
 
 .overflow {
-  text-overflow: " [..]"; 
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
-.outer-div
-{
+.outer-div{
      height: 650px;
      overflow: hidden; 
      position: relative;
@@ -233,57 +241,48 @@ a {
   }
 }
 
+.pic-container{
+  position: relative;
+  margin-top: -20px;
+}
 
-/* ********************************** */
-/*         Anny's Additions           */
-/* ********************************** */
-  .pic-container{
-    position: relative;
-  }
+.web-name{
+  background-color: rgba(255, 255, 255, 0.3);
+  width: 100%;
+  padding: 80px;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  z-index: 3;
+}
 
- .web-name{
-   background-color: rgba(255, 255, 255, 0.3);
-   width: 100%;
-   padding: 80px;
-   position: absolute;
-   top: 50%;
-   left: 0;
-   transform: translateY(-50%);
-   z-index: 3;
- }
+h1{
+  font-size: 80px;
+  text-align: center;
+  color: yellow; 
+  font-family: 'Lora', cursive;
+  font-weight: 800px;
+  margin: 0;
+  padding: 0;
+}
 
- h1{
-   font-size: 80px;
-   text-align: center;
-   color: yellow; 
-   font-family: 'Lora', cursive;
-   font-weight: 800px;
-    margin: 0;
-    padding: 0;
- }
+.active{
+  z-index:3
+}
 
-/* ********************************** */
-/*            New Spencer             */
-/* ********************************** */
-  .active{
-    z-index:3
-  }
+.scrollable-menu {
+  top: 47.7px;
+  height: auto;
+  width: 300px;
+  max-height: 400px;
+  overflow-x: hidden;
+  background-color: rgba(31, 29, 29, 0.8);
+}
 
-  .scrollable-menu {
-    top: 58px;
-    height: auto;
-    width: 300px;
-    max-height: 400px;
-    overflow-x: hidden;
-    background-color: rgba(31, 29, 29, 0.8);
-  }
-
-  .dropdown-item {
-    color: white;
-  }
-/* ********************************** */
-/*           End New Spencer          */
-/* ********************************** */
+.dropdown-item {
+  color: white;
+}
 
 .footer{
   position: fixed;
@@ -303,9 +302,9 @@ a {
 }
 
 #logo-img{
-  width: 68px;
-  height: 79px;
-  margin-top: -12px;
-  margin-left: -16px;
-  margin-bottom: -13px;
+  width: 50px;
+  height: 61px;
+  top: 0;
+  left: 0;
+  position: absolute;
 }
