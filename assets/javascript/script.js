@@ -3,82 +3,159 @@
 /*                                        BACKGROUND IMAGES                                           */
 /*                                                                                                    */
 /* -------------------------------------------------------------------------------------------------- */
+// Background image array
+let bgImageArray = [
+    "https://image.tmdb.org/t/p/original/gLhYg9NIvIPKVRTtvzCWnp1qJWG.jpg",
+    "https://image.tmdb.org/t/p/original/wdj8FK2bCA7iNtZRSzJHrltAwnr.jpg",
+    "https://image.tmdb.org/t/p/original/pb60xSzUnS9D5iDvrV8N6QOG3ZR.jpg",
+    "https://image.tmdb.org/t/p/original/pAWOZHOM86jLN1TlzQZ1NMGjdqK.jpg",
+    "https://image.tmdb.org/t/p/original/aJ7RVMe6eE7gnTVjWqRUiw9wD9D.jpg",
+    "https://image.tmdb.org/t/p/original/ozFatXRKefWqyZQJfiBenTizuqr.jpg"
+];
+
+/* Mandeep Function */
+NowPlaying = function () {
+    // movieInput passed as a param to search movie titles
+    let queryURL = "https://api.themoviedb.org/3/movie/now_playing?api_key=c5203bcbbee2d69dcb21052d7ef5621c&language=en-US&page=1";
+
+    $.ajax({ /* jquery ajax call */
+        url: queryURL,
+        method: "GET"
+    })
+        .then(function (response) { /* promise */
+            //console.log(response);
+
+            var top20 = response.results.length;
+            for (i = 0; i < top20; i++) {
+                var movieID = response.results[i].id;
+                var posterpath = "http://image.tmdb.org/t/p/original" + response.results[i].poster_path;
+                var title = response.results[i].title;
+
+                bgImageArray.push(posterpath);
+
+                //console.log(movieID + " " + title + " " + posterpath);
+
+                var newrow = $(".show-trend").append(
+                    $("<h4>").text(movieID),
+                    $("<h4>").text(title),
+                    $("<img width=300px>").attr("src", posterpath)
+
+                );
+
+                // for every movie get video
+                // let videourl = "https://api.themoviedb.org/3/movie/" + movieID + "?api_key=c5203bcbbee2d69dcb21052d7ef5621c&append_to_response=videos";
+
+                // $.ajax({ /* jquery ajax call */
+                //     url: videourl,
+                //     method: "GET"
+                // })
+                //     .then(function (response) { /* promise */
+                //         console.log(response);
+                //     } );
+            };
+        })
+};
 
 // Shorthand for $( document ).ready()
 $(function () {
-    // Background image array
-    let bgImageArray = ["avatar.jpg", "empire.jpg", "sound.jpg", "darth.jpg",
-        "tanenbaums.jpg", "titanic.jpg", "darjeeling.jpg", "wonderWoman.jpg"
-    ];
 
     // Starts the array index at 0
-    let bgIndex = [0];
+    let bgIndex = 0;
     // When false, background zooms in, when true, background zooms out
     let flip = false;
-    $('.inner-div-in').addClass('active');
-    // Pass index of bgImageArray as url link for background image
-    $('.inner-div-in').css("background-image", `url('assets/images/${bgImageArray[bgIndex]}')`);
-    bgIndex++;
-    $('.inner-div-out').css("background-image", `url('assets/images/${bgImageArray[bgIndex]}')`);
-    $('.inner-div-out').css('animation-delay', `8s`);
 
+    /***********Set Container 1**************** */
+    $('#container-cl-1').find('.inner-div-in').addClass('active');
+
+    // Pass index of bgImageArray as url link for background image
+    $('#container-cl-1').find('.inner-div-in').css("background-image", `url('${bgImageArray[bgIndex]}')`);
+
+    bgIndex++;
+    $('#container-cl-1').find('.inner-div-out').css("background-image", `url('${bgImageArray[bgIndex]}')`);
+
+    /***********Set Container 2**************** */
+    $('#container-cl-2').find('.inner-div-in').addClass('active');
+
+    // Pass index of bgImageArray as url link for background image
+    $('#container-cl-2').find('.inner-div-in').css("background-image", `url('${bgImageArray[bgIndex]}')`);
+
+    bgIndex++;
+    $('#container-cl-2').find('.inner-div-out').css("background-image", `url('${bgImageArray[bgIndex]}')`);
+
+    /***********Set Container 3**************** */
+    $('#container-cl-3').find('.inner-div-in').addClass('active');
+
+    // Pass index of bgImageArray as url link for background image
+    $('#container-cl-3').find('.inner-div-in').css("background-image", `url('${bgImageArray[bgIndex]}')`);
+
+    bgIndex++;
+    $('#container-cl-3').find('.inner-div-out').css("background-image", `url('${bgImageArray[bgIndex]}')`);
 
     // Timer to change background every 5 secs
     setInterval(() => {
         if (!flip) {
-            zoomOut();
+            zoomOut("#container-cl-1");
+            zoomOut("#container-cl-2");
+            zoomOut("#container-cl-3");
         } else if (flip) {
-            zoomIn();
+            zoomIn("#container-cl-1");
+            zoomIn("#container-cl-2");
+            zoomIn("#container-cl-3");
         }
     }, 10000);
 
 
-    zoomIn = function () {
-        $('.inner-div-out').removeClass('active');
-        $('.inner-div-in').remove();
-        $('.inner-div-out').remove();
+
+    zoomIn = function (container) {
+
+        $(container).find('.inner-div-out').removeClass('active');
+        $(container).find('.inner-div-in').remove();
+        $(container).find('.inner-div-out').remove();
+
         if (bgIndex !== bgImageArray.length) {
             let innerDivIn = $('<div class="inner-div-in"></div>');
-            innerDivIn.css("background-image", `url('assets/images/${bgImageArray[bgIndex]}')`);
+            innerDivIn.css("background-image", `url('${bgImageArray[bgIndex]}')`);
             innerDivIn.addClass('active');
-            $('.outer-div').append(innerDivIn);
+            $(container).find('.outer-div').append(innerDivIn);
             bgIndex++;
             let innerDivOut = $('<div class="inner-div-out"></div>');
-            innerDivOut.css("background-image", `url('assets/images/${bgImageArray[bgIndex]}')`);
-            $('.outer-div').append(innerDivOut);
+            innerDivOut.css("background-image", `url('${bgImageArray[bgIndex]}')`);
+            $(container).find('.outer-div').append(innerDivOut);
             flip = false;
         } else if (bgIndex === bgImageArray.length) {
-            bgIndex = 2;
-            zoomIn();
+            bgIndex = 0;
+            zoomIn(container);
         }
+
     }
 
 
-    zoomOut = function () {
+    zoomOut = function (container) {
         if (bgIndex <= 1) {
-            $('.inner-div-in').removeClass('active');
+            $(container).find('.inner-div-in').removeClass('active');
             setTimeout(() => {
-                $('.inner-div-in').remove();
+                $(container).find('.inner-div-in').remove();
             }, 2000);
             bgIndex++;
         } else if ((bgIndex >= 1) && (bgIndex !== bgImageArray.length)) {
-            $('.inner-div-in').removeClass('active');
-            $('.inner-div-in').remove();
-            $('.inner-div-out').remove();
-            console.log(`Zoom-out: removed div-in and div-out, bgIndex: ${bgIndex}`);
+
+            $(container).find('.inner-div-in').removeClass('active');
+            $(container).find('.inner-div-in').remove();
+            $(container).find('.inner-div-out').remove();
+            // console.log(`Zoom-out: removed div-in and div-out, bgIndex: ${bgIndex}`);
 
             let innerDivOut = $('<div class="inner-div-out"></div>');
-            innerDivOut.css("background-image", `url('assets/images/${bgImageArray[bgIndex]}')`);
+            innerDivOut.css("background-image", `url('${bgImageArray[bgIndex]}')`);
             innerDivOut.addClass('active');
-            $('.outer-div').append(innerDivOut);
+            $(container).find('.outer-div').append(innerDivOut);
             bgIndex++;
             let innerDivIn = $('<div class="inner-div-in"></div>');
-            innerDivIn.css("background-image", `url('assets/images/${bgImageArray[bgIndex]}')`);
-            $('.outer-div').append(innerDivIn);
+            innerDivIn.css("background-image", `url('${bgImageArray[bgIndex]}')`);
+            $(container).find('.outer-div').append(innerDivIn);
             flip = true;
         } else if (bgIndex === bgImageArray.length) {
-            bgIndex = 2;
-            zoomOut();
+            bgIndex = 0;
+            zoomOut(container);
         }
     }
 })
@@ -144,9 +221,9 @@ makeApiCall = function (movieInput) {
     }
 
     $.ajax({ /* jquery ajax call */
-            url: queryURL,
-            method: "GET"
-        })
+        url: queryURL,
+        method: "GET"
+    })
         .then(function (response) { /* promise */
             // console.log(response); 
             let data = response;
@@ -208,9 +285,9 @@ makeApiCallGenre = function (genreInput, decadeInput) {
 
 
     $.ajax({ /* jquery ajax call */
-            url: queryURL,
-            method: "GET"
-        })
+        url: queryURL,
+        method: "GET"
+    })
         .then(function (response) { /* promise */
             // console.log(response); 
             let data = response;
@@ -236,9 +313,9 @@ parseData = function (data) {
         // constructs percentage colors
         if (vote_average <= 70) {
             vote_color = "orange";
-        }else if (vote_average <= 80) {
+        } else if (vote_average <= 80) {
             vote_color = "green";
-        }else if (vote_average >= 80) {
+        } else if (vote_average >= 80) {
             vote_color = "blue";
         }
         // converts percent into string
@@ -259,60 +336,6 @@ renderCard = function (title, release_date, poster, overview, vote_average, vote
 }
 
 
-/* Mandeep Function */
-
-// NowPlaying = function () {
-//    // movieInput passed as a param to search movie titles
-//    let queryURL = "https://api.themoviedb.org/3/movie/now_playing?api_key=c5203bcbbee2d69dcb21052d7ef5621c&language=en-US&page=1";
-
-//    $.ajax({ /* jquery ajax call */
-//        url: queryURL,
-//        method: "GET"
-//    })
-//        .then(function (response) { /* promise */
-//            console.log(response);
-
-//            var top20 = response.results.length;
-//            for (i = 0; i < 10; i++) {
-//                var movieID = response.results[i].id;
-//                var posterpath = "http://image.tmdb.org/t/p/original/"+response.results[i].poster_path;
-//                var title = response.results[i].title;
-
-//                console.log(movieID + " " + title + " " + posterpath);
-
-//                var newrow = $(".show-trend").append(
-//                    $("<h4>").text(movieID),
-//                    $("<h4>").text(title),
-//                    $("<img width=300px>").attr("src", posterpath)
-
-//                );
-
-//                //for every movie get video
-//                let videourl = "https://api.themoviedb.org/3/movie/" + movieID + "?api_key=c5203bcbbee2d69dcb21052d7ef5621c&append_to_response=videos,images";
-
-//                $.ajax({ /* jquery ajax call */
-//                    url: videourl,
-//                    method: "GET"
-//                })
-//                    .then(function (response) { /* promise */
-//                        console.log(response);
-//                    } );
-
-//                //for keywords
-//                let keywordurl = "https://api.themoviedb.org/3/movie/" + movieID + "/keywords?api_key=c5203bcbbee2d69dcb21052d7ef5621c&append_to_response=videos,images";
-
-//                $.ajax({ /* jquery ajax call */
-//                    url: keywordurl,
-//                    method: "GET"
-//                })
-//                    .then(function (response) { /* promise */
-//                        console.log(response);
-//                    } );
-
-//                //configuartion to get image fullpath
-//            };
-//        })
-//    };
 
 // to see the list of id's for all genre's
 // not needed for production

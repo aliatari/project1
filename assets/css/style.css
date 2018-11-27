@@ -137,7 +137,7 @@ body{
 
 .outer-div
 {
-     height: 650px;
+     height: 50rem;  /*changed by Mandeep from 650px to 1000px*/
      overflow: hidden; 
      position: relative;
 }
@@ -255,7 +255,7 @@ a {
  h1{
    font-size: 80px;
    text-align: center;
-   color: yellow; 
+   color: #ff6600; 
    font-family: 'Lora', cursive;
    font-weight: 800px;
     margin: 0;
@@ -286,7 +286,7 @@ a {
 /* ********************************** */
 
 .footer{
-  position: fixed;
+ /* position: fixed; Commented by Mandeep */ 
   left: 0px;
   bottom: 0px;
   width: 100%;
@@ -294,7 +294,7 @@ a {
   background-color: rgb(31, 29, 29);
   color: white;
   text-align: center;
-  padding: 30px;
+  padding: 20px;
   font-size: 20px;
 }
 
@@ -308,4 +308,11 @@ a {
   margin-top: -12px;
   margin-left: -16px;
   margin-bottom: -13px;
+}
+
+/* *************** */
+/* Mandeep code */
+/* ************** */
+.now-playing-container{
+  background-color: rgb(0, 0, 0);
 }
