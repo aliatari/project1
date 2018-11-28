@@ -3,6 +3,11 @@
 /*                                        BACKGROUND IMAGES                                           */
 /*                                                                                                    */
 /* -------------------------------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- */
+/* Mandeep's changes                                                */
+/* ---------------------------------------------------------------- */
+
 // Background image array
 let bgImageArray = [
     "https://image.tmdb.org/t/p/original/gLhYg9NIvIPKVRTtvzCWnp1qJWG.jpg",
@@ -13,8 +18,40 @@ let bgImageArray = [
     "https://image.tmdb.org/t/p/original/ozFatXRKefWqyZQJfiBenTizuqr.jpg"
 ];
 
+//default location
+let geolocation = "0.00,0.00"; //"47.7059591,-122.2106905";
+
+// Starts the array index at 0
+let bgIndex = 0;
+// When false, background zooms in, when true, background zooms out
+let flip = false;
+
 /* Mandeep Function */
+getLocation = function () {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        console.log("Geolocation not supported by this browser.");
+    }
+};
+
+showPosition = function (position) {
+    // console.log("Latitude: " + position.coords.latitude +
+    //     " Longitude: " + position.coords.longitude);
+    geolocation = position.coords.latitude + "," + position.coords.longitude;
+    console.log(geolocation);
+
+    showTimes();
+
+};
+
+
+
 NowPlaying = function () {
+
+    //Onload set GeoLocation from client's browser
+    getLocation();
+
     // movieInput passed as a param to search movie titles
     let queryURL = "https://api.themoviedb.org/3/movie/now_playing?api_key=c5203bcbbee2d69dcb21052d7ef5621c&language=en-US&page=1";
 
@@ -33,16 +70,7 @@ NowPlaying = function () {
 
                 bgImageArray.push(posterpath);
 
-                //console.log(movieID + " " + title + " " + posterpath);
-
-                var newrow = $(".show-trend").append(
-                    $("<h4>").text(movieID),
-                    $("<h4>").text(title),
-                    $("<img width=300px>").attr("src", posterpath)
-
-                );
-
-                // for every movie get video
+                //for every movie get video
                 // let videourl = "https://api.themoviedb.org/3/movie/" + movieID + "?api_key=c5203bcbbee2d69dcb21052d7ef5621c&append_to_response=videos";
 
                 // $.ajax({ /* jquery ajax call */
@@ -51,18 +79,14 @@ NowPlaying = function () {
                 // })
                 //     .then(function (response) { /* promise */
                 //         console.log(response);
-                //     } );
+                //     });
             };
-        })
+        });
+
 };
 
 // Shorthand for $( document ).ready()
 $(function () {
-
-    // Starts the array index at 0
-    let bgIndex = 0;
-    // When false, background zooms in, when true, background zooms out
-    let flip = false;
 
     /***********Set Container 1**************** */
     $('#container-cl-1').find('.inner-div-in').addClass('active');
@@ -73,7 +97,7 @@ $(function () {
     bgIndex++;
     $('#container-cl-1').find('.inner-div-out').css("background-image", `url('${bgImageArray[bgIndex]}')`);
 
-    // Timer to change background every 5 secs
+    // Timer to change background every 10 secs
     setInterval(() => {
         if (!flip) {
             zoomOut("#container-cl-1");
@@ -85,14 +109,14 @@ $(function () {
     /***********Set Container 2**************** */
     $('#container-cl-2').find('.inner-div-in').addClass('active');
 
-    bgIndex++;
+    //bgIndex++;
     // Pass index of bgImageArray as url link for background image
     $('#container-cl-2').find('.inner-div-in').css("background-image", `url('${bgImageArray[bgIndex]}')`);
 
     bgIndex++;
     $('#container-cl-2').find('.inner-div-out').css("background-image", `url('${bgImageArray[bgIndex]}')`);
 
-    // Timer to change background every 5 secs
+    // Timer to change background every 10 secs
     setInterval(() => {
         if (!flip) {
             zoomOut("#container-cl-2");
@@ -104,14 +128,14 @@ $(function () {
     /***********Set Container 3**************** */
     $('#container-cl-3').find('.inner-div-in').addClass('active');
 
-    bgIndex++;
+    //bgIndex++;
     // Pass index of bgImageArray as url link for background image
     $('#container-cl-3').find('.inner-div-in').css("background-image", `url('${bgImageArray[bgIndex]}')`);
 
     bgIndex++;
     $('#container-cl-3').find('.inner-div-out').css("background-image", `url('${bgImageArray[bgIndex]}')`);
 
-    // Timer to change background every 5 secs
+    // Timer to change background every 10 secs
     setInterval(() => {
         if (!flip) {
             zoomOut("#container-cl-3");
@@ -127,6 +151,7 @@ $(function () {
         $(container).find('.inner-div-out').removeClass('active');
         $(container).find('.inner-div-in').remove();
         $(container).find('.inner-div-out').remove();
+        console.log(`Zoom-in: removed div-in and div-out, bgIndex: ${bgIndex}`);
 
         if (bgIndex !== bgImageArray.length) {
             let innerDivIn = $('<div class="inner-div-in"></div>');
@@ -147,18 +172,20 @@ $(function () {
 
 
     zoomOut = function (container) {
-        if (bgIndex <= 1) {
-            $(container).find('.inner-div-in').removeClass('active');
-            setTimeout(() => {
-                $(container).find('.inner-div-in').remove();
-            }, 2000);
-            bgIndex++;
-        } else if ((bgIndex >= 1) && (bgIndex !== bgImageArray.length)) {
+        // if (bgIndex <= 1) {
+        //     $(container).find('.inner-div-in').removeClass('active');
+        //     setTimeout(() => {
+        //         $(container).find('.inner-div-in').remove();
+        //     }, 2000);
+        //     bgIndex++;
+        // } else if ((bgIndex >= 1) && 
+
+        if (bgIndex !== bgImageArray.length) {
 
             $(container).find('.inner-div-in').removeClass('active');
             $(container).find('.inner-div-in').remove();
             $(container).find('.inner-div-out').remove();
-            // console.log(`Zoom-out: removed div-in and div-out, bgIndex: ${bgIndex}`);
+            console.log(`Zoom-out: removed div-in and div-out, bgIndex: ${bgIndex}`);
 
             let innerDivOut = $('<div class="inner-div-out"></div>');
             innerDivOut.css("background-image", `url('${bgImageArray[bgIndex]}')`);
@@ -235,9 +262,9 @@ makeApiCall = function (movieInput) {
     }
 
     $.ajax({ /* jquery ajax call */
-            url: queryURL,
-            method: "GET"
-        })
+        url: queryURL,
+        method: "GET"
+    })
         .then(function (response) { /* promise */
             // console.log(response); 
             let data = response;
@@ -299,11 +326,11 @@ makeApiCallGenre = function (genreID, decadeID) {
 
 
     $.ajax({ /* jquery ajax call */
-            url: queryURL,
-            method: "GET"
-        })
+        url: queryURL,
+        method: "GET"
+    })
         .then(function (response) { /* promise */
-            console.log(response); 
+            console.log(response);
             let data = response;
             parseData(data);
             renderPagination();
@@ -326,9 +353,9 @@ parseData = function (data) {
         // constructs percentage colors
         if (vote_average <= 70) {
             vote_color = "orange";
-        }else if (vote_average <= 80) {
+        } else if (vote_average <= 80) {
             vote_color = "green";
-        }else if (vote_average >= 80) {
+        } else if (vote_average >= 80) {
             vote_color = "blue";
         }
         // converts percent into string
@@ -337,7 +364,7 @@ parseData = function (data) {
     });
 }
 
-renderPagination = function() {
+renderPagination = function () {
     let pages = $('<div id="pagination"><ul class="pagination pagination-content"><li><a href="#" class="page" id="prev">Prev</a></li><li><a href="#" class="page" id="1">1</a></li><li><a href="#" class="page" id="2">2</a></li><li><a href="#" class="page" id="3">3</a></li><li><a href="#" class="page" id="next">Next</a></li></ul></div>');
     pages.appendTo('.container-fluid');
 }
@@ -354,37 +381,37 @@ renderCard = function (title, release_date, poster, overview, vote_average, vote
 }
 
 // capture clicks on pagination buttons
-$(document).on("click",".pagination li a", function(e){
+$(document).on("click", ".pagination li a", function (e) {
     e.preventDefault();
     pageInput = $(this).attr('id');
     if (pageInput === 'prev') {
         page = (page - 1);
-    }else if (pageInput === 'next') {
+    } else if (pageInput === 'next') {
         page = (page + 1);
     }
     console.log(page);
     goToPage(page);
 });
 
-goToPage = function(page) {
-    
-     // movie genreInput passed as a param to search movie genre's  
+goToPage = function (page) {
+
+    // movie genreInput passed as a param to search movie genre's  
     let queryURL = "https://api.themoviedb.org/3/discover/movie?api_key=c5203bcbbee2d69dcb21052d7ef5621c&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=" + page + "&primary_release_date.gte=" + yearStart + "-01-01&primary_release_date.lte=" + yearEnd + "-12-31&vote_average.gte=6&with_genres=" + genreID;
 
 
     $.ajax({ /* jquery ajax call */
-            url: queryURL,
-            method: "GET"
-        })
+        url: queryURL,
+        method: "GET"
+    })
         .then(function (response) { /* promise */
-            console.log(response); 
+            console.log(response);
             let data = response;
             parseData(data);
             // iterate pageNum for click of 'load more' or 'next page'
             // pageNum++;
             renderPagination();
         });
-}
+};
 
 
 
@@ -403,3 +430,62 @@ goToPage = function(page) {
 // $.ajax(settings2).done(function (response) {
 //   console.log(response);
 // });
+
+/****************************************** */
+/*     NowPlaying Cinemas near me           */
+/****************************************** */
+
+//International  Showtimes they take TMDB movieID so good for us.
+showTimes = function () {
+
+    showtimeURL = "https://api.internationalshowtimes.com/v4/movies/?location=" + geolocation + "&distance=10&limit=10&fields=id,title,synopsis,poster_image_thumbnail,runtime,genres,ratings,website,release_dates,trailers";
+
+    console.log(showtimeURL);
+
+    $.ajax({
+        url: showtimeURL,
+        type: "GET",
+        data: {
+            "countries": "US",
+        },
+        headers: {
+            "X-API-Key": "jDUuWtnLAKvxl1cNbMyNVpHJcpnFGbnX",
+        },
+    })
+        .done(function (data, textStatus, jqXHR) {
+            console.log("HTTP Request Succeeded: " + jqXHR.status);
+            //console.log(data);
+
+            //show only 10 movies near by
+            for (i = 0; i < 10; i++) {
+                //retrieve movie details & showtime details
+                var cinemasQuery = "https://api.internationalshowtimes.com/v4/cinemas?movie_id=" + data.movies[i].id + "&location=" + geolocation + "&distance=10&limit=3";
+                //console.log(cinemasQuery);
+
+                $.ajax({
+                    url: cinemasQuery,
+                    type: "GET",
+                    data: {
+                        "countries": "US",
+                    },
+                    headers: {
+                        "X-API-Key": "jDUuWtnLAKvxl1cNbMyNVpHJcpnFGbnX",
+                    },
+                })
+                    .done(function (data, textStatus, jqXHR) {
+                        console.log("HTTP Request Succeeded: " + jqXHR.status);
+                        //console.log(data);
+
+                        console.log(data.cinemas[0]);
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log("HTTP Request Failed");
+                    });
+
+            };
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            console.log("HTTP Request Failed");
+        });
+};
+
