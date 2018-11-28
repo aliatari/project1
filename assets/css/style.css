@@ -167,6 +167,7 @@ a {
     -moz-backface-visibility:    hidden;
     -ms-backface-visibility:     hidden;
     -webkit-transform: translate3d(0, 0, 0);
+    z-index: 0;
  }
 
  .inner-div-out{
@@ -183,6 +184,7 @@ a {
     -moz-backface-visibility:    hidden;
     -ms-backface-visibility:     hidden;
     -webkit-transform: translate3d(0, 0, 0);
+    z-index: 0;
  }
 
   .active{
@@ -237,10 +239,23 @@ a {
 /* ********************************** */
 /*         Anny's Additions           */
 /* ********************************** */
-  .pic-container{
-    position: relative;
+.movie-notify{
+  padding: 20px;
+  position: absolute;
+  font-family: 'Lora', cursive;
+  width: 400px;
+  height: 400px;
+  right: 5px;
+  background-color: peachpuff;
+  z-index: 99;
   }
-
+.hide{
+  display: none;
+}
+.pic-container{
+  position: relative;
+  
+}
  .web-name{
    background-color: rgba(255, 255, 255, 0.3);
    width: 100%;
@@ -261,6 +276,55 @@ a {
     margin: 0;
     padding: 0;
  }
+
+ #about-us {
+  font-size: 60px;
+  font-weight: bolder;
+  color: rgb(89, 255, 47);
+  float: left;
+  padding-bottom: 20px;
+  font-size: 30px;
+  line-height: 49px;
+}
+#about-container{
+  width: 100%;
+  height: 900px;
+  position: absolute;
+  top: 80px;
+  background-color:brown;
+  color: white;
+  font-family: 'Lora', cursive;
+  z-index: 97;
+}
+
+#looking-pic{
+  float: left;
+  margin-right: 30px;
+  width: 450px;
+  height: 630px;
+}
+
+#content-about{
+  margin: 30px;
+}
+.about-hidden{
+  display: none;
+}
+.about-body{
+  background-color: black;
+}
+
+.pic-hidden{
+  visibility: visible;
+}
+
+#about{
+  padding: 0;
+  border: none;
+  background-color: rgb(31, 29, 29);
+  color: white;
+
+}
 
 /* ********************************** */
 /*            New Spencer             */
@@ -293,9 +357,12 @@ a {
   margin-top: 0px;  
   background-color: rgb(31, 29, 29);
   color: white;
-  text-align: center;
   padding: 30px;
   font-size: 20px;
+}
+footer p{
+  float: left;
+  margin-left: 200px;
 }
 
 #main-nav{
