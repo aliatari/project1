@@ -1,7 +1,21 @@
-// Shorthand for $( document ).ready()
+// globals used as param in query urls
+let page = 1;
+let pagePrev = page - 1;
+let pageNext = page + 1;
+let movieInput = "";
+let genreID = "";
+let decadeID = "";
+let i = 0;
+let yearStart = "";
+let yearEnd = "";
+let callApiByTitle = false;
+let callApiByGenre = false;
+// refelcts number of page loads for API calls
+let pageCount = 0;
+let landingPage = true;
+
 
 renderBackground = function() {
-// $(function () {
     // Background image array
     let bgImageArray = ["avatar.jpg", "empire.jpg", "sound.jpg", "darth.jpg",
         "tanenbaums.jpg", "titanic.jpg", "darjeeling.jpg", "wonderWoman.jpg"
@@ -76,34 +90,36 @@ renderBackground = function() {
             zoomOut();
         }
     }
-// });
 }
 
-renderBackground();
+
+// prevents scrolling of body
+restrictVerticalScroll = function() {
+    if (landingPage) {
+        $('body').css('overflow', 'hidden');
+    }
+}
+
+// allows scrolling of body
+allowVerticalScroll = function() {
+    if (!landingPage) {
+        $('body').css('overflow', 'visible');
+    }
+}
 
 
-/* -------------------------------------------------API's Etc------------------------------------------------- */
+// calls function to display background images
+// renderBackground();
+// and prevent body scroll
+restrictVerticalScroll();
 
 
-// globals used as param in query urls
-let page = 1;
-let pagePrev = page - 1;
-let pageNext = page + 1;
-let movieInput = "";
-let genreID = "";
-let decadeID = "";
-let i = 0;
-let yearStart = "";
-let yearEnd = "";
-let callApiByTitle = false;
-let callApiByGenre = false;
-// refelcts number of page loads for API calls
-let pageCount = 0;
 
 // capture input values for genre
 $('#genre').on('click', 'a', function (e) {
     genreID = $(this).attr('id');
 })
+
 
 // capture input values for decade
 $('#decade').on('click', 'a', function (e) {
@@ -117,20 +133,23 @@ $('#my-form').submit(function (event) {
     if ($('#movie-input').val() === "") {
         makeApiCallGenre(genreID, decadeID);
         clearBody();
+        landingPage = false;
     } else {
         // grab input value from form
         movieInput = $('#movie-input').val().trim();
         // pass value to function
         makeApiCall(movieInput);
         clearBody();
+        landingPage = false;
     }
 });
 
 
 clearBody = function () {
-    //hide background images and footer
+    // hidse background images, pagiantion and footer
     $('.pic-container').css('display', 'none');
-    // $('#footer').css('display', 'none');
+    $('#pagination').remove();
+    $('.footer').css('visibility', 'hidden');
 }
 
 
@@ -144,20 +163,21 @@ makeApiCall = function (movieInput) {
     // movieInput passed as a param to search movie titles
     let queryURL = "https://api.themoviedb.org/3/search/movie?api_key=c5203bcbbee2d69dcb21052d7ef5621c&query=" + movieInput + "&page=" + page + "&sort_by=popularity.desc";
 
-    if (movieInput === "") {
-        // console.log('no movie title entered');
-    }
 
     $.ajax({ /* jquery ajax call */
             url: queryURL,
-            method: "GET"
+            method: "GET",
+            beforeSend: function(){
+                showLoading();
+            },
         })
         .then(function (response) { /* promise */
-            console.log(response);
             let data = response;
             parseData(data);
+            hideLoading();
             callApiByGenre = false;
             callApiByTitle = true;
+            allowVerticalScroll();
             renderPagination();
         });
 }
@@ -205,14 +225,18 @@ makeApiCallGenre = function (genreID, decadeID) {
 
     $.ajax({ /* jquery ajax call */
             url: queryURL,
-            method: "GET"
+            method: "GET",
+            beforeSend: function(){
+                showLoading();
+            },
         })
         .then(function (response) { /* promise */
-            console.log(response);
             let data = response;
             parseData(data);
+            hideLoading();
             callApiByTitle = false;
             callApiByGenre = true;
+            allowVerticalScroll();
             renderPagination();
         });
 }
@@ -256,6 +280,16 @@ parseData = function (data) {
 }
 
 
+showLoading = function() {
+    $('#loading').show();
+}
+
+
+hideLoading = function() {
+    $('#loading').hide();
+};
+
+
 renderCard = function (title, release_date, poster, overview, vote_average, vote_color) {
     let myCol = $('<div class="col-sm-6 col-md-6 pb-4"></div>');
 
@@ -277,7 +311,6 @@ renderPagination = function() {
         renderFooter();
     }
 
-    // /* new Thursday */
     else if (pageCount > 1) {
         // removes previous pagination div
         $('.pagination').remove();
@@ -291,7 +324,7 @@ renderPagination = function() {
 }
 
 renderFooter = function() {
-    $('.footer').css('display', 'block');
+    $('.footer').css('visibility', 'visible');
 }
 
 
@@ -337,19 +370,19 @@ goToPage = function() {
 }
 
 
-
-/* New Wednesday */
-
 // home button clicked
 $('#home').click(function() {
-    $('#about-container').css('display', 'none').empty();
+    $('#about-container').remove();
     $('.row').empty();
     // removes previous pagination div
     $('.pagination').remove();
+    $(".pic-container").css("visibility", 'visible').css('display', 'block');
+    $('.footer').remove();
     renderBackground();
-    $(".pic-container").css("visibility", 'visible');
     // reset pageCount
     pageCount = 0;
+    landingPage = true;
+    restrictVerticalScroll();
 });
 
 // notiification clicked
@@ -361,9 +394,8 @@ $("#notification").on("click", function(){
 $("#about").on("click", function(){
   $("#about-container").removeClass("about-hidden");
   $(".pic-container").css("visibility", 'hidden');
+  $("html, body").scrollTop(2);
 });
-
-
 
 
 /* Mandeep Function */
