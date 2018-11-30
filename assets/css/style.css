@@ -1,29 +1,37 @@
-body{
-  width: 100%;
-  height: 100%;
+html,
+body {
+ height: 100%;
+ position: relative;
 }
 
 .navbar {
   border-radius: 0;
 }
 
-.container {
+/* .container {
   width: 100%;
   height: 100%;
   margin: 0 auto;
+} */
+
+.main-container {
+  height: 100%;
+}
+
+.main-container::after{
+  content: '';
 }
 
 .container-fluid {
-  padding:2% 5% 0 0;
+  padding: 2% 5% 0 0;
 }
-
 
 #contentPanel {
   margin-left: 5%;
 }
 
 .pagination {
-  margin-left: 42%;
+  margin-left: 43%;
   margin-bottom: 5%;
 }
 
@@ -35,8 +43,8 @@ body{
 
 .poster {
   float: left;
-  /* width: 50%; */
-  max-height: 300px;
+  max-width: 36%;
+  height: auto;
 }
 
 .box {
@@ -56,14 +64,11 @@ body{
   animation: progress 1s ease-out forwards;
 }
 
-
-/* additional for percentages */
-
 .flex-wrapper {
   display: flex;
   flex-flow: row nowrap;
 }
-/* new */
+
 .circular-chart { 
     display: inline-block;
     margin: 10px auto;
@@ -75,7 +80,7 @@ body{
 }
 
 .circle-bg {
-  fill: none;
+  fill: black;
   stroke: #eee;
   stroke-width: 3.8;
 }
@@ -106,20 +111,19 @@ body{
 }
 
 .percentage {
-  fill: #666;
+  fill: white;
   font-family: sans-serif;
-  font-size: 0.7em;
+  font-size: 0.9em;
   text-anchor: middle;
 }
 
 #title {
-    /* display: inline-block; */
     float: right;
     font-size: 16px;
     font-weight: bold;
     line-height: 16px;
     position: absolute;
-    top: 5%;
+    top: 6.2%;
     left: 51%;
 }
 
@@ -134,7 +138,6 @@ body{
   height: 127px;
   margin-top: 45%;
   clear: both;
-  /* overflow: hidden; */
   font-size: 12px;
   line-height: 14px;
 }
@@ -150,13 +153,30 @@ body{
      position: relative;
 }
 
+.navbar a {
+  border-bottom: 1px solid transparent;
+  padding-bottom: 5px;
+}
+
 a {
-  color: white;
+  color: lightgrey;;
   font-size: 18px;
   font-weight: bolder;
   font-family: Georgia, 'Times New Roman', Times, serif;
   float: left;
 }
+
+#home:hover, .dropdown-toggle:hover {
+  cursor: pointer; 
+  border-bottom: 1px solid white;
+  color: white;
+  transition: width .3s;
+}
+
+.dropdown-toggle a {
+  text-decoration: none;
+}
+
 
 /* ********************************** */
 /*         Background Image           */
@@ -285,26 +305,116 @@ h1{
 }
 
 .footer{
-  position: fixed;
-  left: 0px;
-  bottom: 0px;
+  display: none;
   width: 100%;
-  margin-top: 0px;  
+  height: 142px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
   background-color: rgb(31, 29, 29);
   color: white;
   text-align: center;
-  padding: 30px;
-  font-size: 20px;
+  clear: both;
 }
 
 #main-nav{
-  padding: 0.5rem 1rem;
+      padding: 0.5rem 1rem 1rem 1rem;
 }
 
 #logo-img{
-  width: 50px;
-  height: 61px;
+  width: 51px;
+  height: 66px;
   top: 0;
   left: 0;
   position: absolute;
+}
+
+/* ********************************** */
+/*         Anny's Additions           */
+/* ********************************** */
+.movie-notify{
+  padding: 20px;
+  position: absolute;
+  font-family: 'Lora', cursive;
+  width: 400px;
+  height: 400px;
+  right: 5px;
+  background-color: peachpuff;
+  z-index: 99;
+  }
+.hide{
+  display: none;
+}
+.pic-container{
+  position: relative;
+  
+}
+ .web-name{
+   background-color: rgba(255, 255, 255, 0.3);
+   width: 100%;
+   padding: 80px;
+   position: absolute;
+   top: 50%;
+   left: 0;
+   transform: translateY(-50%);
+   z-index: 3;
+ }
+
+ h1{
+   font-size: 80px;
+   text-align: center;
+   color: yellow; 
+   font-family: 'Lora', cursive;
+   font-weight: 800px;
+    margin: 0;
+    padding: 0;
+ }
+
+ #about-us {
+  font-size: 60px;
+  font-weight: bolder;
+  color: rgb(89, 255, 47);
+  float: left;
+  padding-bottom: 20px;
+  font-size: 30px;
+  line-height: 49px;
+}
+#about-container{
+  width: 100%;
+  height: 900px;
+  position: absolute;
+  top: 80px;
+  background-color:brown;
+  color: white;
+  font-family: 'Lora', cursive;
+  z-index: 97;
+}
+
+#looking-pic{
+  float: left;
+  margin-right: 30px;
+  width: 450px;
+  height: 630px;
+}
+
+#content-about{
+  margin: 30px;
+}
+.about-hidden{
+  display: none;
+}
+.about-body{
+  background-color: black;
+}
+
+.pic-hidden{
+  visibility: visible;
+}
+
+#about{
+  padding: 0;
+  border: none;
+  background-color: rgb(31, 29, 29);
+  color: white;
+
 }

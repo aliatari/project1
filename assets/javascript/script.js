@@ -1,5 +1,7 @@
 // Shorthand for $( document ).ready()
-$(function () {
+
+renderBackground = function() {
+// $(function () {
     // Background image array
     let bgImageArray = ["avatar.jpg", "empire.jpg", "sound.jpg", "darth.jpg",
         "tanenbaums.jpg", "titanic.jpg", "darjeeling.jpg", "wonderWoman.jpg"
@@ -74,7 +76,10 @@ $(function () {
             zoomOut();
         }
     }
-})
+// });
+}
+
+renderBackground();
 
 
 /* -------------------------------------------------API's Etc------------------------------------------------- */
@@ -82,6 +87,8 @@ $(function () {
 
 // globals used as param in query urls
 let page = 1;
+let pagePrev = page - 1;
+let pageNext = page + 1;
 let movieInput = "";
 let genreID = "";
 let decadeID = "";
@@ -90,6 +97,7 @@ let yearStart = "";
 let yearEnd = "";
 let callApiByTitle = false;
 let callApiByGenre = false;
+// refelcts number of page loads for API calls
 let pageCount = 0;
 
 // capture input values for genre
@@ -107,9 +115,6 @@ $('#decade').on('click', 'a', function (e) {
 $('#my-form').submit(function (event) {
     event.preventDefault();
     if ($('#movie-input').val() === "") {
-        // let genreInput = genreID; /* change these later to simply genreID and decadeID  revisit*/
-        // let decadeInput = decadeID; /* change these later to simply genreID and decadeID  revisit*/
-
         makeApiCallGenre(genreID, decadeID);
         clearBody();
     } else {
@@ -125,11 +130,13 @@ $('#my-form').submit(function (event) {
 clearBody = function () {
     //hide background images and footer
     $('.pic-container').css('display', 'none');
-    $('#footer').css('display', 'none');
+    // $('#footer').css('display', 'none');
 }
 
 
 makeApiCall = function (movieInput) {
+    // empties any previous cards
+    $('.row').empty();
     // iterate page count
     // prevents double-render of pagination div
     pageCount+=1;
@@ -157,8 +164,9 @@ makeApiCall = function (movieInput) {
 
 
 makeApiCallGenre = function (genreID, decadeID) {
-    // iterate page count
-    // prevents double-render of pagination div
+    // empties any previous cards
+    $('.row').empty();
+    // iterate pageCount. prevents double-render of pagination div
     pageCount+=1;
     
     switch (true) {
@@ -209,6 +217,7 @@ makeApiCallGenre = function (genreID, decadeID) {
         });
 }
 
+
 parseData = function (data) {
     let base = "http://image.tmdb.org/t/p/w342/";
 
@@ -246,14 +255,6 @@ parseData = function (data) {
     });
 }
 
-renderPagination = function() {
-    // if this is the first page render
-    if (pageCount === 1) {
-        // renders the pagination 
-        let pages = $('<div id="pagination"><ul class="pagination pagination-content"><li><a href="#" class="page" id="prev">Prev</a></li><li><a href="#" class="page" id="1">1</a></li><li><a href="#" class="page" id="2">2</a></li><li><a href="#" class="page" id="3">3</a></li><li><a href="#" class="page" id="next">Next</a></li></ul></div>');
-        pages.appendTo('.container-fluid');
-    }
-}
 
 renderCard = function (title, release_date, poster, overview, vote_average, vote_color) {
     let myCol = $('<div class="col-sm-6 col-md-6 pb-4"></div>');
@@ -265,9 +266,39 @@ renderCard = function (title, release_date, poster, overview, vote_average, vote
     i++;
 }
 
+
+renderPagination = function() {
+    // if this is the first page render
+    if (pageCount === 1) {
+        // renders the pagination 
+        let pages = $('<div id="pagination"><ul class="pagination pagination-content"><li><a href="#" class="page" id="prev">Prev</a></li><li><a href="#" class="page" id="1">1</a></li><li><a href="#" class="page" id="2">2</a></li><li><a href="#" class="page" id="3">3</a></li><li><a href="#" class="page" id="next">Next</a></li></ul></div>');
+        pages.appendTo('.container-fluid');
+
+        renderFooter();
+    }
+
+    // /* new Thursday */
+    else if (pageCount > 1) {
+        // removes previous pagination div
+        $('.pagination').remove();
+
+        // renders the pagination with page variables
+        let pages = $('<div id="pagination"><ul class="pagination pagination-content"><li><a href="#" class="page" id="prev">Prev</a></li><li><a href="#" class="page" id="'+ pagePrev +'">' + pagePrev + '</a></li><li><a href="#" class="page" id="' + page + '">' + page + '</a></li><li><a href="#" class="page" id="' + pageNext + '">' + pageNext + '</a></li><li><a href="#" class="page" id="next">Next</a></li></ul></div>');
+        pages.appendTo('.container-fluid');
+
+        renderFooter();
+    }
+}
+
+renderFooter = function() {
+    $('.footer').css('display', 'block');
+}
+
+
 // captures clicks on pagination buttons
 $(document).on("click",".pagination li a", function(e){
     e.preventDefault();
+
     // gets id of page button clicked
     pageInput = $(this).attr('id');
     
@@ -279,8 +310,14 @@ $(document).on("click",".pagination li a", function(e){
     }else {
         page = parseInt(pageInput);
     }
+
+    // updates globals
+    pagePrev = page - 1;
+    pageNext = page + 1;
+
     goToPage();
 });
+
 
 goToPage = function() {
     // empties page of previous cards
@@ -289,11 +326,43 @@ goToPage = function() {
     // if user is paginating via genre's
     if (callApiByGenre) {
         makeApiCallGenre(genreID, decadeID);
+        // scrolls to top of window
+        window.scrollTo(0, 0);
     // if user is paginating via title
     }else if(callApiByTitle) {
         makeApiCall(movieInput);
+        // scrolls to top of window
+        window.scrollTo(0, 0);
     }
 }
+
+
+
+/* New Wednesday */
+
+// home button clicked
+$('#home').click(function() {
+    $('#about-container').css('display', 'none').empty();
+    $('.row').empty();
+    // removes previous pagination div
+    $('.pagination').remove();
+    renderBackground();
+    $(".pic-container").css("visibility", 'visible');
+    // reset pageCount
+    pageCount = 0;
+});
+
+// notiification clicked
+$("#notification").on("click", function(){
+    $(".movie-notify").toggle("hide");
+});
+
+// about-us clicked
+$("#about").on("click", function(){
+  $("#about-container").removeClass("about-hidden");
+  $(".pic-container").css("visibility", 'hidden');
+});
+
 
 
 
