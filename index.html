@@ -14,6 +14,9 @@
     
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery.js"></script>
+     <!-- Firebase Reference -->
+    <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase.js"></script>
+
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
 </head>
@@ -91,9 +94,9 @@
             <div class="movie-notify hide">
                 <h3 class="h3 Movie__header">To receive a list of our upcoming movies:</h3><br>
                 <div id="movie-subscribe" class="movie__form">
-                    <input type="email" name="email-subscribe" class="input" placeholder="Enter your email address" style="width: 300px">
+                    <input type="email" name="email-subscribe" class="input" id="email-input" placeholder="Enter your email address" style="width: 300px">
                     <br><br>
-                    <button class="submit-email">Submit</button>
+                    <button class="submit-email" id="email-submit">Submit</button>
                 </div> <br>
                 <div class="movies__thankyou">
                     <p><b>Thank you! Please confirm your email address by responding to the email we just sent you.</b></p>
@@ -129,13 +132,13 @@
         
             <br>
 
-            <img src="assets/images/About-us.jpg" id="looking-pic" alt="looking-pic">
+            <img src="assets/images/image_1.png" id="looking-pic" alt="looking-pic">
         
-            <h2>Why?</h2>
+            <b><h2>Why?</h2>
             
-            <p>Movie-of-All-Time gathers all the hostest and most popular movies of all time. Weither you are searching for new movies that just came out or old movies since 1920's, you will find them all on Movie-of-All-Time. You don't have to dig through google or multiple movie websites to look for you favorite movie anymore! Movie-of-All-Time is here to help you reduce your headache, save time on your searching process, and enjoying your time on your favorite movies.</p>
+            <p>Movie-of-All-Time gathers all the hottest and most popular movies of all time. Weither you are searching for new movies that just came out or old movies since 1920's, you will find them all on Movie-of-All-Time. You don't have to dig through google or multiple movie websites to look for you favorite movie anymore! Movie-of-All-Time is here to help you reduce your headache, save time on your searching process, and enjoying your time on your favorite movies.</p>
             
-            <p>As film lovers ourselves, we became frustrated by how difficult it was to do a simple search, so we decided to gather together, puting out our best work and shut out the best movie website of all time!</p>
+            <p>As film lovers ourselves, we became frustrated by how difficult it was to do a simple search, so we decided to gather together, puting out our best work and shot out the best movie website of all time!</p>
         
             <h2>What is Movie-of-All-Time?</h2>
         
@@ -146,7 +149,7 @@
         
             <h2>What's next?</h2>
         
-            <p>It’s still in early stage for us at Movie-of-All-Time, but we plan to add more new and cool features which help on simplifying the user experience in the coming months.</p>
+            <p>It’s still in early stage for us at Movie-of-All-Time, but we plan to add more new and cool features which help on simplifying the user experience in the coming months.</p></b>
 
         </div>
     </div>
@@ -165,6 +168,7 @@
 
     <script src='assets/javascript/script.js'></script>
     <script src='assets/javascript/script2.js'></script>
+    
 
 </body>
 
