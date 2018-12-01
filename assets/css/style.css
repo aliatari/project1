@@ -1,29 +1,41 @@
-body{
-  width: 100%;
+html {
   height: 100%;
+}
+
+body {
+ height: 100%;
+ position: relative;
 }
 
 .navbar {
   border-radius: 0;
+  /* margin-bottom: 0px;   */ /* added by mandeep*/
 }
 
-.container {
+/* .container {
   width: 100%;
   height: 100%;
   margin: 0 auto;
+} */
+
+.main-container {
+  height: 100%;
+  /* padding-bottom: 142px; */
+  position: relative;
+  box-sizing: border-box;
 }
 
 .container-fluid {
-  padding:2px;
+  padding: 2px;       /*Mandeep needed for play now*/
+  background-color: rgb(0, 0, 0);
 }
-
 
 #contentPanel {
   margin-left: 5%;
 }
 
 .pagination {
-  margin-left: 42%;
+  margin-left: 43%;
   margin-bottom: 5%;
 }
 
@@ -35,8 +47,8 @@ body{
 
 .poster {
   float: left;
-  /* width: 50%; */
-  max-height: 300px;
+  max-width: 36%;
+  height: auto;
 }
 
 .box {
@@ -56,14 +68,11 @@ body{
   animation: progress 1s ease-out forwards;
 }
 
-
-/* additional for percentages */
-
 .flex-wrapper {
   display: flex;
   flex-flow: row nowrap;
 }
-/* new */
+
 .circular-chart { 
     display: inline-block;
     margin: 10px auto;
@@ -75,7 +84,7 @@ body{
 }
 
 .circle-bg {
-  fill: none;
+  fill: black;
   stroke: #eee;
   stroke-width: 3.8;
 }
@@ -106,20 +115,19 @@ body{
 }
 
 .percentage {
-  fill: #666;
+  fill: white;
   font-family: sans-serif;
-  font-size: 0.7em;
+  font-size: 0.9em;
   text-anchor: middle;
 }
 
 #title {
-    /* display: inline-block; */
     float: right;
     font-size: 16px;
     font-weight: bold;
     line-height: 16px;
     position: absolute;
-    top: 5%;
+    top: 6.2%;
     left: 51%;
 }
 
@@ -134,7 +142,6 @@ body{
   height: 127px;
   margin-top: 45%;
   clear: both;
-  /* overflow: hidden; */
   font-size: 12px;
   line-height: 14px;
 }
@@ -146,26 +153,130 @@ body{
 
 .outer-div
 {
-     height: 50rem;  /*changed by Mandeep from 650px to 1000px*/
+     height: 50rem;  /*changed by Mandeep from 650px to 50rem*/
      overflow: hidden; 
      position: relative;
 }
 
+.navbar a {
+  border-bottom: 1px solid transparent;
+  /* padding-bottom: 5px; */ /*commented by Mandeep*/
+}
+
 a {
-  color: white;
-  font-size: 1.15rem;
-  font-weight: 650;
+  color: lightgrey;
+  font-size: 18px;
+  text-decoration: none;
+  font-weight: bolder;
+  font-family: Georgia, 'Times New Roman', Times, serif;
   float: left;
 }
-a:hover {
-  color:#28a745;
-  text-decoration: underline;
+
+#home:hover, .dropdown-toggle:hover {
+  cursor: pointer; 
+  border-bottom: 1px solid white;
+  color: white;
+  transition: width .3s;
 }
+a:hover{
+  color:white;
+}
+.dropdown-toggle a {
+  text-decoration: none;
+}
+
+
+
+/* loading  */
+#loading {
+  top: 0;
+  width: 100vw;
+  height: auto;
+  margin-top: -10%;
+  display: none;
+  text-align: center;
+}
+
+.loadingH1 {
+    margin-left: 15px;
+    font-size: 2.7em;
+    color:  rgb(31, 29, 29);
+    margin-top: 20%;
+}
+
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 57px;
+  height: 64px;
+}
+
+.lds-ellipsis div {
+  position: absolute;
+  /* top: 127px; */
+  width: 11px;
+  height: 11px;
+  margin-top: 30px;
+  border-radius: 50%;
+  background:  rgb(31, 29, 29);
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.lds-ellipsis div:nth-child(1) {
+  left: 6px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(2) {
+  left: 6px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(3) {
+  left: 26px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(4) {
+  left: 45px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(19px, 0);
+  }
+}
+
 
 h1{
   font-size: 3rem;
   text-align: center;
-  /* color: yellow;  */
+  color: lightgray;    /* changed by Mandeep*/
   font-family: 'Lora', cursive;
   font-weight: 800px;
   margin: 0;
@@ -183,7 +294,7 @@ h1{
     animation: animateElementIn linear 12s;
     animation-iteration-count: 1; 
     position: absolute;
-    /* z-index: 1; */
+    z-index: 1;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     -moz-backface-visibility:    hidden;
@@ -199,7 +310,7 @@ h1{
     animation: animateElementOut linear 12s;
     animation-iteration-count: 1;  
     position: absolute;
-    /* z-index: 1; */
+    z-index: 1;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     -moz-backface-visibility:    hidden;
@@ -257,16 +368,10 @@ h1{
 
 .pic-container{
   position: relative;
-  /* margin-top: -20px; */
-}
-
-
-.active{
-  z-index:3
 }
 
 .scrollable-menu {
-  top: 47.7px;
+  top: 53.2px;
   height: auto;
   width: 300px;
   max-height: 400px;
@@ -297,7 +402,7 @@ h1{
   display: block;
   margin:0;
   background: #292828;
-  color: white;
+  color: lightgray;
   width: 100%;
   /* border-top: 8px solid #4aaaa5; */
   padding: 15px;
@@ -306,7 +411,7 @@ h1{
 }
 
 #main-nav{
-  padding: 1rem 1rem;
+  padding: 0.5rem 1rem 1rem 1rem;
   background-image: url(../images/nav-image.jpg);
   background-repeat: round;
 }
@@ -321,7 +426,7 @@ h1{
   vertical-align: middle;
 border: 2px solid transparent;
 border-radius: .5rem;
-border-color: #28a745;
+border-color: lightgray;
 }
 
 /* *************** */
@@ -329,28 +434,36 @@ border-color: #28a745;
 /* ************** */
 .now-playing-container{
   background-color: rgb(0, 0, 0);
-  width: 100%;
-  height: 100%;
+  margin: 0;
+  padding: 5px;
 }
 
 .now-playing{
-  float: left;
+  float: right;
   margin-right: 1rem;
+}
+
+.playing-near-me{
+  margin: 0px;
+  background-color: rgb(0, 0, 0);
 }
 
 .title{
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   font-weight: 500;
+  color: lightgray;
+}
+.synopsis{
+  color: lightgray;
 }
 .trailer-link{
-  color: black;
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  font-weight: 100;
-  font-size: 2rem;
+  color: lightgray;
+  font-size: 0.75rem;
 }
 
 .genre,.runtime{
   font-size: 0.75rem;
+  color: lightgray;
 }
 
 
@@ -363,4 +476,77 @@ border-color: #28a745;
 }
 .info-content {
   color: #999;
+}
+
+.row{
+  padding: 10px;
+}
+
+/* ********************************** */
+/*         Anny's Additions           */
+/* ********************************** */
+.movie-notify{
+  padding: 20px;
+  position: absolute;
+  font-family: 'Lora', cursive;
+  width: 400px;
+  height: 400px;
+  right: 5px;
+  background-color: moccasin;
+  z-index: 99;
+  visibility: visible;
+  }
+
+.hide{
+  display: none;
+}
+
+#about-us {
+  font-size: 60px;
+  font-weight: bolder;
+  color: rgb(12, 53, 2);
+  /* float: left; */
+  padding-bottom: 20px;
+  font-size: 30px;
+  line-height: 49px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+#about-container{
+  background-image: url("../images/yellow-wall.jpeg");
+  background-size: cover;
+  color: black;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: bolder;
+  font-size: 18px;
+  z-index: 90;
+  float: left;
+}
+
+#looking-pic{
+  float: left;
+  width: 590px;
+  height: 820px;
+}
+
+#content-about{
+  margin: 30px;
+}
+.about-hidden{
+  display: none;
+}
+.about-body{
+  background-color: black;
+}
+
+.pic-hidden{
+  visibility: visible;
+}
+
+#about{
+  padding: 0;
+  border: none;
+  background-color: rgb(31, 29, 29);
+  color: white;
+
 }

@@ -20,10 +20,10 @@ let bgImageArray = [
 
 //default location
 
-let longitude = 0.00;
-let latitude = 0.00;
+let longitude = 47.7059591;
+let latitude = -122.2106905;
 
-let geolocation = ""; //"47.7059591,-122.2106905";
+let geolocation = "47.7059591,-122.2106905";
 
 // Starts the array index at 0
 let bgIndex = 0;
@@ -49,12 +49,18 @@ showPosition = function (position) {
     longitude = position.coords.longitude;
     latitude = position.coords.latitude;
     geolocation = position.coords.latitude + "," + position.coords.longitude;
-    console.log(geolocation);
+    //console.log(geolocation);
 
 };
 
 
 NowPlaying = function () {
+
+    //Clear other Cards/About/NowPlaying divs
+    $(".now-playing-container").css("display", "flex");
+    $(".container-fluid").css("display", "none");
+    $(".playing-near-me").css("display", "none");
+    renderFooter();
 
     // movieInput passed as a param to search movie titles
     let queryURL = "https://api.themoviedb.org/3/movie/now_playing?api_key=c5203bcbbee2d69dcb21052d7ef5621c&language=en-US&page=1";
@@ -85,11 +91,20 @@ NowPlaying = function () {
 //International Showtimes API
 showTimes = function () {
 
-    //$(".now-playing-container").attr("hidden", "hidden");
+    //Clear other Cards/About/NowPlaying divs
+    allowVerticalScroll();
+    $(".now-playing-container").css("display", "none");
+    $(".container-fluid").css("display", "none");
+    $(".playing-near-me").css("display", "block");
+    $("#about-container").css("display","none");
+    $(".footer").attr("class","footer fixed-bottom");
+    renderFooter();
 
-    showtimeURL = "https://api.internationalshowtimes.com/v4/movies/?location=" + geolocation + "&distance=10&limit=1&fields=id,title,synopsis,poster_image_thumbnail,runtime,genres,ratings,website,release_dates,trailers";
+    //console.log(geolocation);
 
-    console.log(showtimeURL);
+    showtimeURL = "https://api.internationalshowtimes.com/v4/movies/?location=" + geolocation + "&distance=10&limit=10&fields=id,title,synopsis,poster_image_thumbnail,runtime,genres,ratings,website,release_dates,trailers";
+
+    //console.log(showtimeURL);
 
     $.ajax({
         url: showtimeURL,
@@ -100,10 +115,16 @@ showTimes = function () {
         headers: {
             "X-API-Key": "jDUuWtnLAKvxl1cNbMyNVpHJcpnFGbnX",
         },
+        beforeSend: function () {
+            showLoading();
+        },
     })
         .done(function (data, textStatus, jqXHR) {
             //console.log("HTTP Request Succeeded: " + jqXHR.status);
             //console.log(data);
+
+            hideLoading();
+
             var movieId;
             var posterThumbnail;
             var runtime;
@@ -112,13 +133,9 @@ showTimes = function () {
             var genre;
             var trailers;
             var website;
-            var theatreName;
-            var theatreAddress;
-            var theatrePhone;
-            var theatrewebsite;
 
             //show only 10 movies currently playing near by
-            for (i = 0; i < 1; i++) {
+            for (i = 0; i < 10; i++) {
 
                 //assign Movie data
                 movieId = data.movies[i].id;
@@ -130,27 +147,64 @@ showTimes = function () {
                 trailers = data.movies[i].trailers;
                 website = data.movies[i].website;
 
+                var displaymovieid = "movie-row-"+(i+1);
 
-                console.log(
-                    title + " " + posterThumbnail + " " + synopsis + " " + website + " " + runtime
-                );
+                var playingMovieHTML = 
+               "<div class='col-12' id='"+displaymovieid+"'>"+
+                "<div class='row'>"+
+                    "<div class='col-3'>"+
+                        "<img src='"+posterThumbnail+"' alt='"+title+"' class='now-playing'>"+
+                    "</div>"+
+                    "<div class='col-9'>"+
 
-                console.log(genre.map(e => e.name).join(","));
+                        "<div class='row'>"+
+                            "<div class='col-4 runtime'>"+
+                               "Runtime: "+ runtime + " mins"+
+                            "</div>"+
+                            "<div class='col-4 genre'>"+
+                                "Genre: "+ genre.map(e => e.name).join(", ")+
+                            "</div>"+
+                            "<div class='col-4'>"+
+                                "<a href='"+trailers[0].trailer_files[0].url+"' class='trailer-link' target='_blank'>Trailer</a>"+
+                            "</div>"+
+                        "</div>"+
 
-                console.log(trailers[0].trailer_files[0].url);
+                        "<div class='row'>"+
+                            "<div class='col-12'>"+
+                                "<h5 class='title'>"+title+"</h5>"+
+                                "<p class='synopsis'>"+synopsis+"</p>"+
+                            "</div>"+
+                        "</div>"+
 
-                $("#movie-row-" + (i + 1)).find("img").attr("src", posterThumbnail);
-                $("#movie-row-" + (i + 1)).find("img").attr("alt", title);
-                $("#movie-row-" + (i + 1)).find(".title").text(title);
-                $("#movie-row-" + (i + 1)).find(".synopsis").text(synopsis);
-                $("#movie-row-" + (i + 1)).find(".genre").text("Genre: " + genre.map(e => e.name).join(","));
-                $("#movie-row-" + (i + 1)).find(".runtime").text("Runtime: " + runtime + "mins");
-                $("#movie-row-" + (i + 1)).find(".trailer-link").attr("href", trailers[0].trailer_files[0].url);
+                        "<div class='row'>"+
+                            "<div class='col-4 theatre1'>"+
+                                "<a class='theatreName1'></a>"+
+                                "<p class='theatreAdd1'></p>"+
+                                "<h6 class='theatrePh1'></h6>"+
+                            "</div>"+
+                            "<div class='col-4'>"+
+                                "<a class='theatre2'></a>"+
+                                "<p class='theatreAdd2'></p>"+
+                                "<h6 class='theatrePh2'></h6>"+
+                            "</div>"+
+                            "<div class='col-4'>"+
+                                "<a class='theatre3'></a>"+
+                                "<p class='theatreAdd3'></p>"+
+                                "<h6 class='theatrePh3'></h6>"+
+                            "</div>"+
+                        "</div>"+
+                    "</div>"+
+                "</div>";
 
-                //retrieve movie details & showtime details
-                var cinemasQuery = "https://api.internationalshowtimes.com/v4/cinemas?movie_id=" + movieId + "&location=" + geolocation + "&distance=10&limit=3";
+            $(".playing-near-me").append(playingMovieHTML);      
+            
+            
+            
+                //get 3 near by cinemas where this movie is being played
+                var cinemasQuery = "https://api.internationalshowtimes.com/v4/cinemas?movie_id=" + movieId + "&location=" + geolocation + "&distance=10&limit=4";
                 //console.log(cinemasQuery);
 
+                var resp = 
                 $.ajax({
                     url: cinemasQuery,
                     type: "GET",
@@ -163,28 +217,34 @@ showTimes = function () {
                 })
                     .done(function (data, textStatus, jqXHR) {
                         //console.log("HTTP Request Succeeded: " + jqXHR.status);
-                        //console.log(data);
-
+                        // console.log(data);
+                        
+                        var theatreName=["","",""];
+                        var theatreAddress=["","",""];
+                        var theatrePhone=["","",""];
+                        var theatreWebsite=["","",""];
+                       
                         for (j = 0; j < 3; j++) {
-                            theatreName = data.cinemas[j].name;
-                            theatreAddress = data.cinemas[j].location.address.display_text;
-                            theatrePhone = data.cinemas[j].telephone;
-                            theatrewebsite = data.cinemas[j].website;
-
-                            console.log(
-                                theatreName + " " + theatreAddress + " " + theatrePhone + " " + theatrewebsite
-                            );
-
-                            $("#movie-row-1").find(".showingtheatres").append(text(theatreName + " " + theatreAddress + " " + theatrePhone + " " + theatrewebsite));
+                            theatreName[j] = data.cinemas[j].name;
+                           
+                            theatreAddress[j] = data.cinemas[j].location.address.display_text;
+                    
+                            theatrePhone[j] = data.cinemas[j].telephone;
+                         
+                            theatreWebsite[j] = data.cinemas[j].website;
+                           
                         };
                     })
                     .fail(function (jqXHR, textStatus, errorThrown) {
                         console.log("HTTP Request Failed");
                     });
+                    
+                    // console.log(
+                    //     theatreName + "\n" + theatreAddress + "\n" + theatrePhone + "\n" + theatreWebsite );
 
-            };
-        
-        google.maps.event.addDomListener(window, 'load', initMap);
+        };
+
+            //google.maps.event.addDomListener(window, 'load', initMap);
 
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
@@ -244,7 +304,14 @@ $(function () {
     //Onload set GeoLocation from client's browser
     getLocation();
 
+    //Clear other Cards/About/NowPlaying divs
+    $(".now-playing-container").css("display", "flex");
+    $(".container-fluid").css("display", "none");
+    $(".playing-near-me").css("display", "none");
+    // restrictVerticalScroll();
+
     NowPlaying();
+
     /***********Set Container 1**************** */
     $('#container-cl-1').find('.inner-div-in').addClass('active');
 
@@ -309,7 +376,7 @@ $(function () {
         $(container).find('.inner-div-out').remove();
         //console.log(`Zoom-in: removed div-in and div-out, bgIndex: ${bgIndex}`);
 
-        if (bgIndex !== bgImageArray.length) {
+        if (bgIndex < bgImageArray.length) {
             let innerDivIn = $('<div class="inner-div-in"></div>');
             innerDivIn.css("background-image", `url('${bgImageArray[bgIndex]}')`);
             innerDivIn.addClass('active');
@@ -326,7 +393,7 @@ $(function () {
             } else if (container === "#container-cl-3") {
                 flip3 = false;
             };
-        } else if (bgIndex === bgImageArray.length) {
+        } else {
             bgIndex = 0;
             zoomIn(container);
         }
@@ -343,7 +410,7 @@ $(function () {
         //     bgIndex++;
         // } else if ((bgIndex >= 1) && 
 
-        if (bgIndex !== bgImageArray.length) {
+        if (bgIndex < bgImageArray.length) {
 
             $(container).find('.inner-div-in').removeClass('active');
             $(container).find('.inner-div-in').remove();
@@ -365,7 +432,7 @@ $(function () {
             } else if (container === "#container-cl-3") {
                 flip3 = true;
             };
-        } else if (bgIndex + 1 === bgImageArray.length) {
+        } else {
             bgIndex = 0;
             zoomOut(container);
         }
@@ -376,9 +443,10 @@ $(function () {
 
 /* -------------------------------------------------API's Etc------------------------------------------------- */
 
-
 // globals used as param in query urls
 let page = 1;
+let pagePrev = page - 1;
+let pageNext = page + 1;
 let movieInput = "";
 let genreID = "";
 let decadeID = "";
@@ -387,12 +455,34 @@ let yearStart = "";
 let yearEnd = "";
 let callApiByTitle = false;
 let callApiByGenre = false;
+// refelcts number of page loads for API calls
 let pageCount = 0;
+let landingPage = true;
+
+// prevents scrolling of body
+restrictVerticalScroll = function () {
+    if (landingPage) {
+        $('body').css('overflow', 'hidden');
+    }
+}
+
+// allows scrolling of body
+allowVerticalScroll = function () {
+    if (!landingPage) {
+        $('body').css('overflow', 'visible');
+    }
+}
+
+// calls function to display background images
+// renderBackground();
+// and prevent body scroll
+// restrictVerticalScroll(); ---commented by Mandeep
 
 // capture input values for genre
 $('#genre').on('click', 'a', function (e) {
     genreID = $(this).attr('id');
 })
+
 
 // capture input values for decade
 $('#decade').on('click', 'a', function (e) {
@@ -403,30 +493,42 @@ $('#decade').on('click', 'a', function (e) {
 // captures value(s) from form submission
 $('#my-form').submit(function (event) {
     event.preventDefault();
-    if ($('#movie-input').val() === "") {
-        // let genreInput = genreID; /* change these later to simply genreID and decadeID  revisit*/
-        // let decadeInput = decadeID; /* change these later to simply genreID and decadeID  revisit*/
 
+    $(".footer").attr("class","footer fixed-bottom");
+
+    $(".container-fluid").css("display", "block");
+    if ($('#movie-input').val() === "") {
         makeApiCallGenre(genreID, decadeID);
         clearBody();
+        landingPage = false;
     } else {
         // grab input value from form
         movieInput = $('#movie-input').val().trim();
+        //clear input field after passing value
+        $("#movie-input").val("");
+        
+        clearBody();
         // pass value to function
         makeApiCall(movieInput);
-        clearBody();
+        
+        landingPage = false;
     }
 });
 
 
 clearBody = function () {
-    //hide background images and footer
-    $('.pic-container').css('display', 'none');
-    $('#footer').css('display', 'none');
+    // hidse background images, pagiantion and footer
+    $(".playing-near-me").css("display","none");
+    $('.now-playing-container').css('display', 'none');
+    $('#pagination').remove();
+    // $('.container-fluid').css('display','none');
+    $('.footer').css('visibility', 'hidden');
 }
 
 
 makeApiCall = function (movieInput) {
+    // empties any previous cards
+    $('.row').empty();
     // iterate page count
     // prevents double-render of pagination div
     pageCount += 1;
@@ -434,28 +536,30 @@ makeApiCall = function (movieInput) {
     // movieInput passed as a param to search movie titles
     let queryURL = "https://api.themoviedb.org/3/search/movie?api_key=c5203bcbbee2d69dcb21052d7ef5621c&query=" + movieInput + "&page=" + page + "&sort_by=popularity.desc";
 
-    if (movieInput === "") {
-        // console.log('no movie title entered');
-    }
 
     $.ajax({ /* jquery ajax call */
         url: queryURL,
-        method: "GET"
+        method: "GET",
+        beforeSend: function () {
+            showLoading();
+        },
     })
         .then(function (response) { /* promise */
-            console.log(response);
             let data = response;
             parseData(data);
+            hideLoading();
             callApiByGenre = false;
             callApiByTitle = true;
+            allowVerticalScroll();
             renderPagination();
         });
 }
 
 
 makeApiCallGenre = function (genreID, decadeID) {
-    // iterate page count
-    // prevents double-render of pagination div
+    // empties any previous cards
+    $('.row').empty();
+    // iterate pageCount. prevents double-render of pagination div
     pageCount += 1;
 
     switch (true) {
@@ -494,17 +598,22 @@ makeApiCallGenre = function (genreID, decadeID) {
 
     $.ajax({ /* jquery ajax call */
         url: queryURL,
-        method: "GET"
+        method: "GET",
+        beforeSend: function () {
+            showLoading();
+        },
     })
         .then(function (response) { /* promise */
-            console.log(response);
             let data = response;
             parseData(data);
+            hideLoading();
             callApiByTitle = false;
             callApiByGenre = true;
+            allowVerticalScroll();
             renderPagination();
         });
 }
+
 
 parseData = function (data) {
     let base = "http://image.tmdb.org/t/p/w342/";
@@ -543,14 +652,16 @@ parseData = function (data) {
     });
 }
 
-renderPagination = function () {
-    // if this is the first page render
-    if (pageCount === 1) {
-        // renders the pagination 
-        let pages = $('<div id="pagination"><ul class="pagination pagination-content"><li><a href="#" class="page" id="prev">Prev</a></li><li><a href="#" class="page" id="1">1</a></li><li><a href="#" class="page" id="2">2</a></li><li><a href="#" class="page" id="3">3</a></li><li><a href="#" class="page" id="next">Next</a></li></ul></div>');
-        pages.appendTo('.container-fluid');
-    }
+
+showLoading = function () {
+    $('#loading').show();
 }
+
+
+hideLoading = function () {
+    $('#loading').hide();
+};
+
 
 renderCard = function (title, release_date, poster, overview, vote_average, vote_color) {
     let myCol = $('<div class="col-sm-6 col-md-6 pb-4"></div>');
@@ -562,9 +673,38 @@ renderCard = function (title, release_date, poster, overview, vote_average, vote
     i++;
 }
 
+
+renderPagination = function () {
+    // if this is the first page render
+    if (pageCount === 1) {
+        // renders the pagination 
+        let pages = $('<div id="pagination"><ul class="pagination pagination-content"><li><a href="#" class="page" id="prev">Prev</a></li><li><a href="#" class="page" id="1">1</a></li><li><a href="#" class="page" id="2">2</a></li><li><a href="#" class="page" id="3">3</a></li><li><a href="#" class="page" id="next">Next</a></li></ul></div>');
+        pages.appendTo('.container-fluid');
+
+        renderFooter();
+    }
+
+    else if (pageCount > 1) {
+        // removes previous pagination div
+        $('.pagination').remove();
+
+        // renders the pagination with page variables
+        let pages = $('<div id="pagination"><ul class="pagination pagination-content"><li><a href="#" class="page" id="prev">Prev</a></li><li><a href="#" class="page" id="' + pagePrev + '">' + pagePrev + '</a></li><li><a href="#" class="page" id="' + page + '">' + page + '</a></li><li><a href="#" class="page" id="' + pageNext + '">' + pageNext + '</a></li><li><a href="#" class="page" id="next">Next</a></li></ul></div>');
+        pages.appendTo('.container-fluid');
+
+        renderFooter();
+    }
+}
+
+renderFooter = function () {
+    $('.footer').css('visibility', 'visible');
+}
+
+
 // captures clicks on pagination buttons
 $(document).on("click", ".pagination li a", function (e) {
     e.preventDefault();
+
     // gets id of page button clicked
     pageInput = $(this).attr('id');
 
@@ -576,8 +716,14 @@ $(document).on("click", ".pagination li a", function (e) {
     } else {
         page = parseInt(pageInput);
     }
+
+    // updates globals
+    pagePrev = page - 1;
+    pageNext = page + 1;
+
     goToPage();
 });
+
 
 goToPage = function () {
     // empties page of previous cards
@@ -586,8 +732,94 @@ goToPage = function () {
     // if user is paginating via genre's
     if (callApiByGenre) {
         makeApiCallGenre(genreID, decadeID);
+        // scrolls to top of window
+        window.scrollTo(0, 0);
         // if user is paginating via title
     } else if (callApiByTitle) {
         makeApiCall(movieInput);
+        // scrolls to top of window
+        window.scrollTo(0, 0);
     }
 }
+
+
+// // home button clicked
+// $('#home').click(function () {
+//     $('#about-container').remove();
+//     $('.row').empty();
+//     // removes previous pagination div
+//     $('.pagination').remove();
+//     $(".pic-container").css("visibility", 'visible').css('display', 'block');
+//     // $('.footer').remove();
+//     renderBackground();
+//     // reset pageCount
+//     pageCount = 0;
+//     landingPage = true;
+//     // restrictVerticalScroll();
+// });
+
+
+// Anny's code
+
+// notiification clicked
+$("#notification").on("click", function () {
+
+    //console.log("test"); 
+    $(".movie-notify").toggle("hide");
+
+});
+
+$("#about").on("click", function () {
+
+    $("#about-container").css("display","block");
+    $(".playing-near-me").css("display","none");
+    $(".now-playing-container").css("display", 'none');
+    $(".movie-notify").toggle("hide");
+    $(".hide").css("display", 'none');
+
+    // $("html, body").scrollTop(2);
+});
+
+// Initialize Firebase
+var config = {
+    // apiKey: "AIzaSyBvEDRjMvvZ39keCybb9VWvlKNKdAD9NQg",
+    // authDomain: "movie-of-all-time-web.firebaseapp.com",
+    // databaseURL: "https://movie-of-all-time-web.firebaseio.com",
+    // projectId: "movie-of-all-time-web",
+    // storageBucket: "movie-of-all-time-web.appspot.com",
+    // messagingSenderId: "338668317924"
+
+    apiKey: "AIzaSyDSuTBSAA-n9YAyX6i2QIaqGsI_8hNqY8o",
+    authDomain: "bootcamp-mk.firebaseapp.com",
+    databaseURL: "https://bootcamp-mk.firebaseio.com",
+    projectId: "bootcamp-mk",
+    storageBucket: "bootcamp-mk.appspot.com",
+    messagingSenderId: "1069260610018"
+
+};
+firebase.initializeApp(config);
+
+var database = firebase.database();
+
+// 2. Submit Email button
+$("#email-submit").on("click", function (event) {
+    event.preventDefault();
+
+    // Grabs user input
+    var emailAddress = $("#email-input").val().trim();
+
+    // Creates local "temporary" object for holding employee data
+    var newEmail = {
+        email: emailAddress
+    };
+
+    // Uploads employee data to the database
+    database.ref().push(newEmail);
+
+    //console.log(newEmail.email);
+
+    $("#email-input").val("");
+
+    $(".movie-notify").toggle("hide");
+
+});
