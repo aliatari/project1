@@ -506,7 +506,6 @@ $('#my-form').submit(function (event) {
         movieInput = $('#movie-input').val().trim();
         //clear input field after passing value
         $("#movie-input").val("");
-        
         clearBody();
         // pass value to function
         makeApiCall(movieInput);
@@ -520,6 +519,7 @@ clearBody = function () {
     // hidse background images, pagiantion and footer
     $(".playing-near-me").css("display","none");
     $('.now-playing-container').css('display', 'none');
+    $(".about-hidden").css("display", 'none');
     $('#pagination').remove();
     // $('.container-fluid').css('display','none');
     $('.footer').css('visibility', 'hidden');
@@ -761,21 +761,21 @@ goToPage = function () {
 
 // Anny's code
 
-// notiification clicked
-$("#notification").on("click", function () {
-
-    //console.log("test"); 
-    $(".movie-notify").toggle("hide");
-
-});
+$("#notification").on("click", function(){
+  
+    //   //console.log("test"); 
+      $(".tooltiptext").toggle("hide");
+      
+      
+     })
 
 $("#about").on("click", function () {
 
     $("#about-container").css("display","block");
     $(".playing-near-me").css("display","none");
     $(".now-playing-container").css("display", 'none');
-    $(".movie-notify").toggle("hide");
-    $(".hide").css("display", 'none');
+    // $(".tooltip").toggle("hide");
+    $(".container-fluid").css("display", 'none');
 
     // $("html, body").scrollTop(2);
 });
